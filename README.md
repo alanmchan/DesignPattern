@@ -8,62 +8,38 @@
 一个类只负责一项职责
 
 ```java
-public class singleResponsibility {
-    public static void main(String[] args) {
-        Vehicle vehicle = new Vehicle();
-        vehicle.run("airplane");
-        vehicle.run("ship");
-        vehicle.run("car");
+public class Person {
+    public void work() {
+        System.out.println("working");
     }
-}
 
-// 违反单一职责
-class Vehicle {
-    public void run(String vechile) {
-        System.out.println(vechile + "running...");
-    }
+  public void study() {
+        System.out.println("studying");
+  }
 }
 ```
 
 ```java
-//改进
-public class singleResponsibility {
-    public static void main(String[] args) {
-        RoadVehicle roadVehicle = new RoadVehicle();
-        roadVehicle.run("car");
-        WaterVehicle waterVehicle = new WaterVehicle();
-        waterVehicle.run("ship");
-        AirVehicle airVechile = new AirVehicle();
-        airVechile.run("plan");
-    }
+public class Worker {
+  public void work() {
+      System.out.println("working");
+  }
 }
 
-// 遵守单一职责，但是花销大
-class RoadVehicle {
-    public void run(String vechile) {
-        System.out.println(vechile + "running...");
-    }
-}
-
-class WaterVehicle {
-    public void run(String vechile) {
-        System.out.println(vechile + "running...");
-    }
-}
-
-class AirVehicle {
-    public void run(String vechile) {
-        System.out.println(vechile + "running...");
-    }
+public class Student {
+  public void study() {
+      System.out.println("studying");
+  }
 }
 ```
 
 ### 接口隔离原则
 
-客户端不应该依赖它不需要的接口，即一个类对另一个类的依赖应该建立在最小接口上
+客户端不应该依赖它不需要的接口，即一个类对另一个类的依赖应该建立在最小接口上.
+
+有个大接口，有两个实现类B和D，类A通过接口Interface依赖类B,类C通过接口依赖类D
 
 ```java
-// 类A通过接口Interface依赖类B,类C通过接口依赖类D
 interface Interface {
     void method1();
     void method2();
@@ -71,7 +47,9 @@ interface Interface {
     void method4();
     void method5();
 }
+```
 
+```java
 class B implements Interface1 {
     @Override
     public void method1() {
@@ -98,7 +76,9 @@ class B implements Interface1 {
 
     }
 }
+```
 
+```java
 class D implements Interface1 {
     @Override
     public void method1() {
@@ -125,7 +105,9 @@ class D implements Interface1 {
 
     }
 }
+```
 
+```java
 class A {
     void depend1(Interface1 interface1) {
         interface1.method1();
@@ -139,7 +121,9 @@ class A {
         interface1.method3();
     }
 }
+```
 
+```java
 class C {
     void depend1(Interface1 interface1) {
         interface1.method1();
@@ -155,23 +139,29 @@ class C {
 }
 ```
 
+上面的实现没有遵循接口隔离原则，应将大接口拆分成独立小接口
+
 ```java
 // 将接口拆分为几个独立的接口，类A和类C分别与他们依赖的接口建立依赖关系，实现接口隔离原则
-interface Interface2 {
+interface Interface1 {
     void method1();
 }
+```
 
-interface Interface3 {
+```java
+interface Interface2 {
     void method2();
     void method3();
 }
 
-interface Interface4 {
+interface Interface3 {
     void method4();
     void method5();
 }
+```
 
-class B2 implements Interface2, Interface3 {
+```java
+class B2 implements Interface1, Interface2 {
     @Override
     public void method1() {
 
@@ -187,8 +177,10 @@ class B2 implements Interface2, Interface3 {
 
     }
 }
+```
 
-class D2 implements Interface2, Interface4 {
+```java
+class D2 implements Interface1, Interface3 {
     @Override
     public void method1() {
 
@@ -204,32 +196,36 @@ class D2 implements Interface2, Interface4 {
 
     }
 }
+```
 
+```java
 class A2{
-    void depend1(Interface2 interface2) {
-        interface2.method1();
+    void depend1(Interface1 interface1) {
+        interface1.method1();
     }
 
-    void depend2(Interface3 interface3) {
-        interface3.method2();
+    void depend2(Interface2 interface2) {
+        interface2.method2();
     }
 
-    void depend3(Interface3 interface3) {
-        interface3.method3();
+    void depend3(Interface2 interface2) {
+        interface2.method3();
     }
 }
+```
 
+```java
 class C2 {
-    void depend1(Interface2 interface2) {
-        interface2.method1();
+    void depend1(Interface1 interface1) {
+        interface1.method1();
     }
 
-    void depend4(Interface4 interface4) {
-        interface4.method4();
+    void depend4(Interface3 interface3) {
+        interface3.method4();
     }
 
-    void depend5(Interface4 interface4) {
-        interface4.method5();
+    void depend5(Interface3 interface3) {
+        interface3.method5();
     }
 }
 ```
@@ -256,7 +252,6 @@ class Person {
     }
 }
 // 如果我们获取的对象是 微信，短信等等，则新增类，同时 Perons 也要增加相应的接收方法
-// 引入一个抽象的接口 IReceiver, 表示接收者, 这样 Person 类与接口 IReceiver 发生依赖
 // 引入一个抽象的接口 IReceiver, 表示接收者, 这样 Person 类与接口 IReceiver 发生依赖
 ```
 
@@ -326,7 +321,7 @@ class A {
 }
 // B继承A
 class B extends A {
-    // 重写了A类的方法，改变了原有意思
+    // 重写了A类的方法，改变了原有意思, 这样引用基类的地方就不能使用其子类
     @Override
     public int func1(int a, int b) {
         return a - b;
@@ -407,7 +402,7 @@ class Circle implements Shape {
 一个对象应该对其他对象保持最少的了解。迪米特法则又被称为最少知道原则
 一个类对自己依赖的类知道的越少越好。更简单的理解：只与直接朋友通信
 
-直接朋友：每个对象都会与其他对象有耦合关系，只要两个对象直接有耦合关系，就称两个对象间是朋友关系。耦合的方式有很多：依赖、关联、聚合、组合继承等，其中，出现成员变量、方法参数、方法返回值中的类为直接朋友，出现在局部变量中的类不是直接朋友。即，陌生的类最好不要以局部变量的形式出现在类的内部
+直接朋友：每个对象都会与其他对象有耦合关系，只要两个对象直接有耦合关系，就称两个对象间是朋友关系。耦合的方式有很多：依赖、关联、聚合、组合、继承等，其中，出现成员变量、方法参数、方法返回值中的类为直接朋友，出现在局部变量中的类不是直接朋友。即，陌生的类最好不要以局部变量的形式出现在类的内部
 
 类与类的关系越紧密，耦合度越大。迪米特法则核心是降低类之间的耦合。
 
@@ -439,9 +434,9 @@ class Student {
 
 - 继承（泛化）
 - 实现
-- 组合：关联关系的一种特例，他体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合；他同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束
-- 聚合：关联关系的一种特例，他体现的是整体与部分、拥有的关系，即has-a的关系，此时整体与部分之间是可分离的，他们可以具有各自的生命周期
-- 关联：强依赖关系，表现在代码层面，为被关联类B以类属性的形式出现在关联类A中
+- 组合：关联关系的一种特例，他体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合；他同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束.表现在代码层面，为被关联类B以类属性的形式出现在关联类A中
+- 聚合：关联关系的一种特例，他体现的是整体与部分、拥有的关系，即has-a的关系，此时整体与部分之间是可分离的，他们可以具有各自的生命周期.表现在代码层面，为被关联类B以类属性的形式出现在关联类A中
+- 关联：强依赖关系，表现在代码层面，为被关联类B以类属性的形式出现在关联类A中. 组合、聚合、关联它们在代码层面一样，只能通过逻辑和语义区分
 - 依赖：一个类A使用到了另一个类B，而这种使用关系是具有偶然性的、临时性的、非常弱的，表现在代码层面，为类B作为参数被类A在某个method中使用
 
 ```puml
@@ -697,6 +692,8 @@ enum Singleton {
 }
 ```
 
+枚举类型的每个常量在JVM中只有一个实例
+
 - 线程安全
 - 防止反序列化，重新创建对象
 
@@ -717,26 +714,34 @@ public class TestSimpleFactory {
         pizza.show();
     }
 }
+```
 
+```java
 // 抽象产品，只有一个等级产品
 interface Pizza {
     public void show();
 }
+```
 
+```java
 class CheesePizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Cheese Pizza");
     }
 }
+```
 
+```java
 class PepperPizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Pepper Pizza");
     }
 }
+```
 
+```java
 // 一个工厂生产同一等级的多个产品
 class SimpleFactory {
     public Pizza createPizza(String type) {
@@ -772,31 +777,41 @@ public class TestFactory {
         pizza1.show();
     }
 }
+```
 
+```java
 // 抽象产品，只有一个等级产品
 interface Pizza {
     public void show();
 }
+```
 
+```java
 class CheesePizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Cheese Pizza");
     }
 }
+```
 
+```java
 class PepperPizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Pepper Pizza");
     }
 }
+```
 
+```java
 // 抽象工厂
 interface Factory {
     public Pizza createPizza();
 }
+```
 
+```java
 // 具体工厂，一个工厂生产一种产品
 class CheeseFactory implements Factory {
     @Override
@@ -805,7 +820,9 @@ class CheeseFactory implements Factory {
         return new CheesePizza();
     }
 }
+```
 
+```java
 class PepperFactory implements Factory{
     @Override
     public Pizza createPizza() {
@@ -843,47 +860,61 @@ class PepperFactory implements Factory{
 interface Pizza {
     public void show();
 }
+```
 
+```java
 class CheesePizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Cheese Pizza");
     }
 }
+```
 
+```java
 class PepperPizza implements Pizza {
     @Override
     public void show() {
         System.out.println("Pepper Pizza");
     }
 }
+```
 
+```java
 // 抽象产品， 第二个产品等级
 interface Hamburger {
     public void show();
 }
+```
 
+```java
 class BeefHamburger implements Hamburger {
     @Override
     public void show() {
         System.out.println("Beef Hamburger");
     }
 }
+```
 
+```java
 class ChickenHamburger implements Hamburger {
     @Override
     public void show() {
         System.out.println("Chicken Hamburger");
     }
 }
+```
 
+```java
 // 抽象工厂
 interface AbsFactory {
     public Pizza createPizza();
 
     public Hamburger createHamburger();
 }
+```
 
+```java
 // 具体工厂， 一个工厂生产不同等级的多个产品，第一个产品族
 class LDFactory implements AbsFactory {
     @Override
@@ -898,7 +929,9 @@ class LDFactory implements AbsFactory {
         return new BeefHamburger();
     }
 }
+```
 
+```java
 // 具体工厂， 第二个产品族
 class NYFactory implements AbsFactory {
     @Override
@@ -913,7 +946,6 @@ class NYFactory implements AbsFactory {
         return new ChickenHamburger();
     }
 }
-
 ```
 
 - 简单工厂：一个工厂生产同一产品等级的多种产品，通过if-else决定生产哪种产品
@@ -994,7 +1026,9 @@ public class TestBuilder {
         System.out.println(house);
     }
 }
+```
 
+```java
 // 产品
 class House {
     private String base;
@@ -1018,7 +1052,9 @@ class House {
         return this.base + this.wall + this.roof;
     }
 }
+```
 
+```java
 // 抽象建造者
 interface HouseBuilder {
     House house = new House();
@@ -1031,7 +1067,9 @@ interface HouseBuilder {
 
     House buildHouse();
 }
+```
 
+```java
 // 具体建造者
 class CommonHouseBuilder implements HouseBuilder {
     @Override
@@ -1057,7 +1095,9 @@ class CommonHouseBuilder implements HouseBuilder {
         house.buildRoof("Red");
     }
 }
+```
 
+```java
 class HighHouseBuilder implements HouseBuilder {
     @Override
     public void buildBase() {
@@ -1082,7 +1122,9 @@ class HighHouseBuilder implements HouseBuilder {
         return house;
     }
 }
+```
 
+```java
 // 指挥者
 class Direct {
     private HouseBuilder houseBuilder;
