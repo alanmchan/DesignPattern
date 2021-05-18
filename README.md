@@ -465,7 +465,7 @@ Human ..> Pen
     - 原型
     - 建造者
 - 结构型模式：软件结构
-    - 适配器
+    - __适配器__
     - 桥接
     - __装饰__
     - 组合
@@ -1177,24 +1177,32 @@ public class TestAdapter {
         vga.projection();
     }
 }
+```
 
+```java
 // 目标接口 target
 interface VGA {
     public void projection();
 }
+```
 
+```java
 // 被适配对象 adaptee
 interface USB {
     public void show();
 }
+```
 
+```java
 class USBImpl implements USB {
     @Override
     public void show() {
         System.out.println("显示PPT");
     }
 }
+```
 
+```java
 // adapter
 class AdapterUSB2VGA extends USBImpl implements VGA {
     @Override
@@ -1202,7 +1210,6 @@ class AdapterUSB2VGA extends USBImpl implements VGA {
         super.show();
     }
 }
-
 ```
 
 ##### 对象适配器
@@ -1222,24 +1229,32 @@ public class TestAdapter {
         vga.projection();
     }
 }
+```
 
+```java
 // target
 interface VGA {
     public void projection();
 }
+```
 
+```java
 // adaptee
 interface USB {
     public void show();
 }
+```
 
+```java
 class USBImpl implements USB {
     @Override
     public void show() {
         System.out.println("show PPT");
     }
 }
+```
 
+```java
 // adapter
 class AdapterUSB2VGA implements VGA {
     private USB usb;
@@ -1267,8 +1282,6 @@ class AdapterUSB2VGA implements VGA {
  *
  * 当不需要全部实现接口提供的方法时，可先设计一个抽象类实现接口，并为该接口中每个方法提供一个默认实现（空方法），那么该抽象类的子类可有选择地覆盖父类的某些方法来实现需求，它适用于一个接口不想使用其所有的方法的情
  */
-public class TestAdapter {
-}
 
 // target
 interface VGA {
@@ -1279,19 +1292,25 @@ interface VGA {
 
     public void c();
 }
+```
 
+```java
 // adaptee
 interface USB {
     public void show();
 }
+```
 
+```java
 class USBImpl implements USB {
     @Override
     public void show() {
         System.out.println("show PPT");
     }
 }
+```
 
+```java
 // adapter
 abstract class AdapterUSB2VGA implements VGA {
     USB usb = new USBImpl();
@@ -1311,8 +1330,9 @@ abstract class AdapterUSB2VGA implements VGA {
 
     }
 }
+```
 
-
+```java
 class AdapterUSB2VGAImpl extends AdapterUSB2VGA {
     // AdapterUSB2VGA实现，不用去实现b()和c()方法。
     @Override
@@ -1320,12 +1340,11 @@ class AdapterUSB2VGAImpl extends AdapterUSB2VGA {
         super.project();
     }
 }
-
 ```
 
 - 类适配器：adapter继承adaptee，不推荐
 - 对象适配器：adapter与adaptee关系是组合关系，推荐
-- 接口适配器：adapter与adaptee关系是组合关系，推荐，适用于target中有不需要的接口
+- 接口适配器：adapter与adaptee关系是组合关系，推荐，适用于target中有不需要的方法
 
 #### 桥接模式Bridge
 
